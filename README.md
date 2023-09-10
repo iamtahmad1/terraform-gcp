@@ -1,2 +1,0 @@
-# terraform-gcp
-# init commit

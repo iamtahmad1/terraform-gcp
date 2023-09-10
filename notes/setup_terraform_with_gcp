@@ -1,0 +1,37 @@
+1- Install gcloud
+https://cloud.google.com/sdk/docs/install
+
+Ubuntu 22
+sudo apt-get update
+echo "deb https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo tee /usr/share/keyrings/cloud.google.gpg
+sudo apt-get update && sudo apt-get install google-cloud-cli
+
+
+2- 
+# Verify installations
+gcloud --version
+gcloud init 
+terraform --version
+
+3- 
+# let's say project_id is someproject
+# set the project in cloud shell. 
+gcloud config set project someproject
+
+# Creating service account
+gcloud iam service-accounts create somesvc \
+    --description="DESCRIPTION" \
+    --display-name="resource-manager-list"
+
+# Assigning project level owner role to service account
+gcloud projects add-iam-policy-binding \ 
+someproject --member="serviceAccount:somesvc@someproject.iam.gserviceaccount.com" \
+ --role="roles/owner"
+
+# Creating key
+gcloud iam service-accounts keys create somesvc.json --iam-account  \
+somesvc@someproject.iam.gserviceaccount.com
+
+4-
+export GOOGLE_APPLICATION_CREDENTIALS=somesvc.json
